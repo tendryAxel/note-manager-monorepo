@@ -2,7 +2,37 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '4.1.1'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'org.openapi.generator' version '7.10.0'
 }
+
+openApiGenerate {
+	generatorName = "spring"
+	inputSpec = "$projectDir/openapi.yml"
+	outputDir = "$buildDir/generated/openapi"
+
+	modelPackage = "com.note.api.note_manager.model"
+
+	globalProperties = [
+			models: "",
+			apis: ""
+	]
+
+	configOptions = [
+			useSpringBoot3: "true",
+			dateLibrary: "java21"
+	]
+}
+
+sourceSets {
+	main {
+		java {
+			srcDir "$buildDir/generated/openapi/src/main/java"
+		}
+	}
+}
+
+compileJava.dependsOn tasks.openApiGenerate
+
 
 group = 'com.note.api'
 version = '0.0.1-SNAPSHOT'
