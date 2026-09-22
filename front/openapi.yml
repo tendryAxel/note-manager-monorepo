@@ -142,7 +142,6 @@ paths:
           required: true
           schema:
             type: string
-            format: uuid
       responses:
         '204':
           description: Note deleted successfully
@@ -227,7 +226,6 @@ components:
       properties:
         id:
           type: string
-          format: uuid
           example: "550e8400-e29b-41d4-a716-446655440000"
         email:
           type: string
@@ -248,7 +246,6 @@ components:
       properties:
         id:
           type: string
-          format: uuid
           example: "550e8400-e29b-41d4-a716-446655440000"
         title:
           type: string
@@ -260,7 +257,6 @@ components:
           example: "Note content here..."
         userId:
           type: string
-          format: uuid
           example: "550e8400-e29b-41d4-a716-446655440000"
         createdAt:
           type: string
