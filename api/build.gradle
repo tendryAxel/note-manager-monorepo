@@ -8,21 +8,33 @@ plugins {
 def openApiSpec = file("$projectDir/openapi.yml").canonicalFile
 
 openApiGenerate {
-	generatorName = "spring"
+	generatorName = "java"
 	inputSpec = openApiSpec.absolutePath
 	outputDir = "$buildDir/generated/openapi"
 
-	modelPackage = "com.note.api.note_manager.model"
-
-	globalProperties = [
-			models: "",
-			apis: ""
-	]
+	modelPackage = "com.note.api.note_manager.rest.model"
+	invokerPackage = "com.note.api.note_manager.rest.client"
+	apiPackage = "com.note.api.note_manager.rest.api"
 
 	configOptions = [
 			useSpringBoot3: "true",
-			dateLibrary: "java21"
+			dateLibrary: "java21",
+			serializableModel: "true",
+			serializationLibrary: "jackson",
+			useJakartaEe: "true",
 	]
+
+	typeMappings = [
+			// What date-time type to use when? https://i.stack.imgur.com/QPhGW.png
+			Date: "java.time.LocalDate",
+			DateTime: "java.time.Instant",
+	]
+
+	skipValidateSpec = false
+	logToStderr = true
+	generateAliasAsModel = false
+	enablePostProcessFile = false
+	library = "native"
 }
 
 sourceSets {
@@ -66,7 +78,11 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.testcontainers:testcontainers-junit-jupiter'
 	testImplementation 'org.testcontainers:testcontainers-postgresql'
-	testImplementation("net.datafaker:datafaker:2.7.0")
+	testImplementation 'net.datafaker:datafaker:2.7.0'
+	implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3'
+	testImplementation 'org.mockito:mockito-core'
+	testImplementation 'org.mockito:mockito-junit-jupiter'
 }
 
 tasks.named('test') {
