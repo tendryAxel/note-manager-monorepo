@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 
 class NoteManagerApiApplicationTests extends TestSetup {
 
-	@Test
-	void contextLoads() {
-	}
-
+  @Test
+  void contextLoads() {}
 }

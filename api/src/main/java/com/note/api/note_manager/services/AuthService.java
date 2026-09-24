@@ -9,13 +9,14 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class AuthService {
-    private final AuthenticationManager authenticationManager;
-    private final JwtServices jwtServices;
+  private final AuthenticationManager authenticationManager;
+  private final JwtServices jwtServices;
 
-    public String loginToToken(String userName, String password) {
-        var authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, password));
-        var userDetails =
-                (UserDetails) authentication.getPrincipal();
-        return jwtServices.generateToken(userDetails);
-    }
+  public String loginToToken(String userName, String password) {
+    var authentication =
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(userName, password));
+    var userDetails = (UserDetails) authentication.getPrincipal();
+    return jwtServices.generateToken(userDetails);
+  }
 }

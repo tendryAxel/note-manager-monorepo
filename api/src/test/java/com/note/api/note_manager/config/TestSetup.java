@@ -1,7 +1,10 @@
 package com.note.api.note_manager.config;
 
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+
 import com.note.api.note_manager.rest.client.ApiClient;
 import com.note.api.note_manager.rest.model.User;
+import java.util.Optional;
 import net.datafaker.Faker;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,10 +16,6 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 
-import java.util.Optional;
-
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-
 @Testcontainers
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = RANDOM_PORT)
@@ -25,27 +24,30 @@ public class TestSetup {
   static Faker faker = new Faker();
 
   @Container
-  static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:18")
+  static PostgreSQLContainer postgreSQLContainer =
+      new PostgreSQLContainer("postgres:18")
           .withUsername(faker.name().name())
           .withPassword(faker.credentials().password());
 
-    @DynamicPropertySource
-    static void properties(DynamicPropertyRegistry register) {
+  @DynamicPropertySource
+  static void properties(DynamicPropertyRegistry register) {
     register.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
     register.add("spring.datasource.username", postgreSQLContainer::getUsername);
     register.add("spring.datasource.password", postgreSQLContainer::getPassword);
   }
 
   private ApiClient anApiClient(Optional<String> token) {
-      var apiClient = new ApiClient();
-      apiClient.setScheme("http");
-      apiClient.setHost("localhost");
-      apiClient.setPort(port);
+    var apiClient = new ApiClient();
+    apiClient.setScheme("http");
+    apiClient.setHost("localhost");
+    apiClient.setPort(port);
 
-      token.ifPresent(t -> apiClient.setRequestInterceptor(
-              builder -> builder.header("Authorization", "Bearer " + t)));
+    token.ifPresent(
+        t ->
+            apiClient.setRequestInterceptor(
+                builder -> builder.header("Authorization", "Bearer " + t)));
 
-      return apiClient;
+    return apiClient;
   }
 
   protected ApiClient anApiClient(@NotNull String token) {
@@ -56,6 +58,5 @@ public class TestSetup {
     return anApiClient(Optional.empty());
   }
 
-  protected void registerUser(User user, String token) {
-  }
+  protected void registerUser(User user, String token) {}
 }
