@@ -3,9 +3,13 @@ package com.note.api.note_manager.config;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import com.note.api.note_manager.config.container.PostgresSetup;
+import com.note.api.note_manager.rest.api.AuthenticationApi;
 import com.note.api.note_manager.rest.client.ApiClient;
-import com.note.api.note_manager.rest.model.User;
+import com.note.api.note_manager.rest.client.ApiException;
+import com.note.api.note_manager.rest.model.AuthResponse;
+import com.note.api.note_manager.rest.model.RegisterRequest;
 import java.util.Optional;
+import net.datafaker.Faker;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -55,5 +59,22 @@ public class TestSetup {
     return anApiClient(Optional.empty());
   }
 
-  protected void registerUser(User user, String token) {}
+  protected AuthResponse registerUser(RegisterRequest user) {
+    var authApi = new AuthenticationApi(anApiClient());
+
+    try {
+      return authApi.register(user);
+    } catch (ApiException e) {
+      throw new RuntimeException("User cannot be registered " + e);
+    }
+  }
+
+  protected AuthResponse registerUser() {
+    var faker = new Faker();
+    return registerUser(
+        new RegisterRequest()
+            .email(faker.internet().emailAddress())
+            .name(faker.name().name())
+            .password(faker.credentials().password()));
+  }
 }
