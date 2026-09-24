@@ -2,7 +2,10 @@ package com.note.api.note_manager.models;
 
 import com.note.api.note_manager.models.user.UserAuthorities;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,6 +19,9 @@ import static org.hibernate.type.SqlTypes.NAMED_ENUM;
 
 @Entity
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "user_info")
 public class UserInfo implements UserDetails {
     @Id private String id;
@@ -30,6 +36,9 @@ public class UserInfo implements UserDetails {
 
     @Column(unique = true, nullable = false)
     private String email;
+
+    @Column(name = "user_name")
+    private String name;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

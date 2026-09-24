@@ -35,8 +35,8 @@ public class SecurityConf {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers(POST, "/auth/login").permitAll()
-                                .requestMatchers(POST, "/auth/register").permitAll()
+                                .requestMatchers(POST, "/api/v1/auth/login").permitAll()
+                                .requestMatchers(POST, "/api/v1/auth/register").permitAll()
                                 .anyRequest().denyAll()
                 )
                 .build();

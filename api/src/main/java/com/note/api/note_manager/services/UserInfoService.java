@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,5 +25,9 @@ public class UserInfoService implements UserDetailsService {
         return userInfoRepository
                 .findUserInfoByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User with email %s not found".formatted(email)));
+    }
+
+    public UserInfo registerUser(UserInfo user) {
+        return userInfoRepository.save(user);
     }
 }
