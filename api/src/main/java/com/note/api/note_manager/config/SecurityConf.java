@@ -1,5 +1,6 @@
 package com.note.api.note_manager.config;
 
+import static org.springframework.http.HttpMethod.OPTIONS;
 import static org.springframework.http.HttpMethod.POST;
 
 import com.note.api.note_manager.services.UserInfoService;
@@ -10,11 +11,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableWebSecurity
 @AllArgsConstructor
 public class SecurityConf {
   private final UserInfoService userInfoService;
@@ -26,10 +30,15 @@ public class SecurityConf {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) {
-    return http.csrf(csrf -> csrf.disable())
+    return http.csrf(AbstractHttpConfigurer::disable)
+        .cors(AbstractHttpConfigurer::disable)
+        .formLogin(AbstractHttpConfigurer::disable)
+        .logout(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(
             auth ->
-                auth.requestMatchers(POST, "/api/v1/auth/login")
+                auth.requestMatchers(OPTIONS, "/**")
+                    .permitAll()
+                    .requestMatchers(POST, "/api/v1/auth/login")
                     .permitAll()
                     .requestMatchers(POST, "/api/v1/auth/register")
                     .permitAll()
