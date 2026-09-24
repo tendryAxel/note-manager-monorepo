@@ -6,6 +6,7 @@ import static org.hibernate.type.SqlTypes.NAMED_ENUM;
 import com.note.api.note_manager.models.user.UserAuthorities;
 import jakarta.persistence.*;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,6 +39,16 @@ public class UserInfo implements UserDetails {
 
   @Column(name = "user_name")
   private String name;
+
+  @OneToMany(mappedBy = "user")
+  private List<SessionToken> sessionTokens;
+
+  public List<SessionToken> getValidSessionToken() {
+    var now = new Date();
+    return sessionTokens.stream()
+        .filter(sessionToken -> sessionToken.getExpireAt().after(now))
+        .toList();
+  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

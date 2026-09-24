@@ -22,6 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @AllArgsConstructor
 public class SecurityConf {
   private final UserInfoService userInfoService;
+  private final AuthProvider authProvider;
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -34,6 +35,7 @@ public class SecurityConf {
         .cors(AbstractHttpConfigurer::disable)
         .formLogin(AbstractHttpConfigurer::disable)
         .logout(AbstractHttpConfigurer::disable)
+        .authenticationProvider(authProvider)
         .authorizeHttpRequests(
             auth ->
                 auth.requestMatchers(OPTIONS, "/**")

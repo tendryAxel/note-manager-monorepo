@@ -1,5 +1,7 @@
 package com.note.api.note_manager.utils.date;
 
+import java.time.Duration;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import lombok.AllArgsConstructor;
@@ -15,6 +17,12 @@ public class DateUtils {
     this.calendar.setTime(date);
     this.calendar.add(
         dateTypeEnumMapper.dateTypeEnumToGregorianCalendarOperationField(dateType), amount);
+    return this.calendar.getTime();
+  }
+
+  public Date add(Date date, Duration duration) {
+    this.calendar.setTime(date);
+    this.calendar.add(Calendar.SECOND, (int) duration.getSeconds());
     return this.calendar.getTime();
   }
 }
