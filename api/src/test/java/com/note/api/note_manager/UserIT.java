@@ -62,6 +62,32 @@ public class UserIT extends TestSetup {
   }
 
   @Test
+  void register_wrong_password_ko() throws ApiException {
+    var authApi = new AuthenticationApi(anApiClient());
+    var registerRequest =
+        new RegisterRequest()
+            .email(faker.internet().emailAddress())
+            .password(faker.credentials().password())
+            .name(faker.name().name());
+
+    var registration = authApi.register(registerRequest);
+
+    assertNotNull(registration.getToken());
+    assertNotNull(registration.getUser());
+    assertNotNull(registration.getUser().getId());
+    assertEquals(registerRequest.getEmail(), registration.getUser().getEmail());
+    assertEquals(registerRequest.getName(), registration.getUser().getName());
+
+    var loginRequest =
+        new LoginRequest()
+            .email(registerRequest.getEmail())
+            .password("this is the wrong password, and if it's, you've got a bad luck");
+
+    var exception = assertThrows(Exception.class, () -> authApi.login(loginRequest));
+    assertTrue(exception.getMessage().contains("Wrong password"));
+  }
+
+  @Test
   void login_with_unknow_identifiers_ko() throws ApiException {
     var authApi = new AuthenticationApi(anApiClient());
 

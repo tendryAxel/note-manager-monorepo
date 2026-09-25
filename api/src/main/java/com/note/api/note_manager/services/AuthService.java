@@ -4,7 +4,9 @@ import com.note.api.note_manager.models.SessionToken;
 import java.time.Duration;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,9 +16,15 @@ public class AuthService {
   private final JwtServices jwtServices;
   private final UserInfoService userInfoService;
   private final SessionTokenService sessionTokenService;
+  private final PasswordEncoder passwordEncoder;
 
   public String loginWithToken(String email, String password) {
     var user = userInfoService.getByEmail(email);
+
+    if (!passwordEncoder.matches(password, user.getPassword())) {
+      throw new BadCredentialsException("Wrong password");
+    }
+
     var token = jwtServices.generateToken(user);
     sessionTokenService.save(new SessionToken(token, user, Duration.ofDays(1)));
     var bearer = "Bearer %s".formatted(token);
