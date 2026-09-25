@@ -9,10 +9,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @RestController
 @AllArgsConstructor
 public class NoteController {
@@ -21,7 +19,8 @@ public class NoteController {
   @GetMapping("/api/v1/notes")
   public List<Note> getNotes() {
     var principal = getPrincipal();
-    return principal.getNotes().stream()
+    var notes = noteService.getNotesByUserId(principal.getId());
+    return notes.stream()
         .map(
             note ->
                 new Note()
@@ -44,14 +43,13 @@ public class NoteController {
                 new Date(),
                 request.getTitle(),
                 request.getContent()));
-    Note note =
+    var note =
         new Note()
             .id(saved.getId())
             .content(saved.getContent())
             .title(saved.getTitle())
             .userId(principal.getId())
             .createdAt(saved.getCreatedAt().toInstant());
-    log.info("Note => " + note);
     return note;
   }
 }

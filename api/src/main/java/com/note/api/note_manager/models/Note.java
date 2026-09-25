@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class Note {
   @Id @Column private String id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
   private UserInfo user;
 

@@ -40,7 +40,7 @@ public class UserInfo implements UserDetails {
   @Column(name = "user_name")
   private String name;
 
-  @OneToMany(mappedBy = "user")
+  @OneToMany(mappedBy = "user", fetch = LAZY)
   private List<Note> notes;
 
   @Nullable
