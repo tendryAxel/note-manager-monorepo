@@ -17,7 +17,7 @@ public class SessionToken {
   @Column(nullable = false)
   private String token;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
   private UserInfo user;
 

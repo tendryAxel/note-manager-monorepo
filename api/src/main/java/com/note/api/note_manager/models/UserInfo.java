@@ -1,12 +1,12 @@
 package com.note.api.note_manager.models;
 
 import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.FetchType.LAZY;
 import static org.hibernate.type.SqlTypes.NAMED_ENUM;
 
 import com.note.api.note_manager.models.user.UserAuthorities;
 import jakarta.persistence.*;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,14 +41,11 @@ public class UserInfo implements UserDetails {
   private String name;
 
   @OneToMany(mappedBy = "user")
-  private List<SessionToken> sessionTokens;
+  private List<Note> notes;
 
-  public List<SessionToken> getValidSessionToken() {
-    var now = new Date();
-    return sessionTokens.stream()
-        .filter(sessionToken -> sessionToken.getExpireAt().after(now))
-        .toList();
-  }
+  @Nullable
+  @OneToMany(mappedBy = "user", fetch = LAZY)
+  private List<SessionToken> sessionTokens;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

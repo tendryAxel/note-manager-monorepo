@@ -2,12 +2,14 @@ package com.note.api.note_manager.models;
 
 import jakarta.persistence.*;
 import java.util.Date;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "note")
 public class Note {
   @Id @Column private String id;

@@ -2,16 +2,13 @@ package com.note.api.note_manager.controllers;
 
 import static com.note.api.note_manager.models.user.UserAuthorities.USER;
 
-import com.note.api.note_manager.models.SessionToken;
 import com.note.api.note_manager.models.UserInfo;
 import com.note.api.note_manager.rest.model.AuthResponse;
 import com.note.api.note_manager.rest.model.LoginRequest;
 import com.note.api.note_manager.rest.model.RegisterRequest;
 import com.note.api.note_manager.rest.model.User;
 import com.note.api.note_manager.services.AuthService;
-import com.note.api.note_manager.services.SessionTokenService;
 import com.note.api.note_manager.services.UserInfoService;
-import java.time.Duration;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,13 +22,11 @@ public class AuthController {
   private final AuthService authService;
   private final UserInfoService userInfoService;
   private final PasswordEncoder passwordEncoder;
-  private final SessionTokenService sessionTokenService;
 
   @PostMapping("/api/v1/auth/login")
   public AuthResponse login(@RequestBody LoginRequest request) {
     var user = userInfoService.getByEmail(request.getEmail());
-    var token = authService.loginToToken(request.getEmail(), request.getPassword());
-    sessionTokenService.save(new SessionToken(token, user, Duration.ofDays(1)));
+    var token = authService.loginWithToken(request.getEmail(), request.getPassword());
 
     return new AuthResponse()
         .token(token)
@@ -49,8 +44,7 @@ public class AuthController {
             .name(request.getName())
             .build();
     var user = userInfoService.registerUser(userRequest);
-    var token = authService.loginToToken(request.getEmail(), request.getPassword());
-    sessionTokenService.save(new SessionToken(token, user, Duration.ofHours(1)));
+    var token = authService.loginWithToken(request.getEmail(), request.getPassword());
 
     return new AuthResponse()
         .token(token)
