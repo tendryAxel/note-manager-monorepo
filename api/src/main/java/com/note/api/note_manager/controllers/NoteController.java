@@ -43,13 +43,26 @@ public class NoteController {
                 new Date(),
                 request.getTitle(),
                 request.getContent()));
-    var note =
-        new Note()
-            .id(saved.getId())
-            .content(saved.getContent())
-            .title(saved.getTitle())
-            .userId(principal.getId())
-            .createdAt(saved.getCreatedAt().toInstant());
-    return note;
+    return new Note()
+        .id(saved.getId())
+        .content(saved.getContent())
+        .title(saved.getTitle())
+        .userId(principal.getId())
+        .createdAt(saved.getCreatedAt().toInstant());
+  }
+
+  @DeleteMapping("/api/v1/notes/{id}")
+  public Note deleteNote(@PathVariable String id) {
+    var principal = getPrincipal();
+    if (!noteService.doUserOwnThisNote(principal.getId(), id)) {
+      throw new RuntimeException("User with id %s doesn't own the note with id %s");
+    }
+    var deleted = noteService.deleteById(id);
+    return new Note()
+        .id(deleted.getId())
+        .content(deleted.getContent())
+        .title(deleted.getTitle())
+        .userId(principal.getId())
+        .createdAt(deleted.getCreatedAt().toInstant());
   }
 }

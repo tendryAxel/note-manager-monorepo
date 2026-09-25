@@ -73,7 +73,8 @@ public class SecurityConf {
             bearerFilter(
                 new OrRequestMatcher(
                     PathPatternRequestMatcher.withDefaults().matcher(GET, "/api/v1/notes"),
-                    PathPatternRequestMatcher.withDefaults().matcher(POST, "/api/v1/notes"))),
+                    PathPatternRequestMatcher.withDefaults().matcher(POST, "/api/v1/notes"),
+                    PathPatternRequestMatcher.withDefaults().matcher(DELETE, "/api/v1/notes/*"))),
             AnonymousAuthenticationFilter.class)
         .authenticationProvider(authProvider)
         .exceptionHandling(
@@ -100,6 +101,8 @@ public class SecurityConf {
                     .requestMatchers(GET, "/api/v1/notes")
                     .authenticated()
                     .requestMatchers(POST, "/api/v1/notes")
+                    .authenticated()
+                    .requestMatchers(DELETE, "/api/v1/notes/*")
                     .authenticated()
                     // AUTH
                     .requestMatchers(POST, "/api/v1/auth/login")

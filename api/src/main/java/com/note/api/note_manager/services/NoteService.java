@@ -18,4 +18,20 @@ public class NoteService {
   public List<Note> getNotesByUserId(String userId) {
     return noteRepository.getByUser_Id(userId);
   }
+
+  public Note getById(String noteId) {
+    return noteRepository
+        .findById(noteId)
+        .orElseThrow(() -> new RuntimeException("Note with id %s Not Found".formatted(noteId)));
+  }
+
+  public Note deleteById(String noteId) {
+    var note = getById(noteId);
+    noteRepository.deleteById(noteId);
+    return note;
+  }
+
+  public boolean doUserOwnThisNote(String userId, String noteId) {
+    return noteRepository.existsByUser_IdAndId(userId, noteId);
+  }
 }
