@@ -72,10 +72,8 @@ public class SecurityConf {
         .addFilterBefore(
             bearerFilter(
                 new OrRequestMatcher(
-                    PathPatternRequestMatcher.withDefaults().matcher("/api/v1/notes")
-                    //
-                    // PathPatternRequestMatcher.withDefaults().matcher("/**")
-                    )),
+                    PathPatternRequestMatcher.withDefaults().matcher(GET, "/api/v1/notes"),
+                    PathPatternRequestMatcher.withDefaults().matcher(POST, "/api/v1/notes"))),
             AnonymousAuthenticationFilter.class)
         .authenticationProvider(authProvider)
         .exceptionHandling(
@@ -96,21 +94,20 @@ public class SecurityConf {
                                 req, res, null, forbiddenWithRemoteInfo(req))))
         .authorizeHttpRequests(
             auth ->
-                auth
-                    //                        .requestMatchers(OPTIONS, "/**")
-                    //                    .permitAll()
-                    //                    // NOTE
-                    //                    .requestMatchers(GET, "/api/v1/notes")
-                    //                    .authenticated()
-                    //                    .requestMatchers(POST, "/api/v1/notes")
-                    //                    .authenticated()
-                    //                    // AUTH
-                    //                    .requestMatchers(POST, "/api/v1/auth/login")
-                    //                    .permitAll()
-                    //                    .requestMatchers(POST, "/api/v1/auth/register")
-                    //                    .permitAll()
+                auth.requestMatchers(OPTIONS, "/**")
+                    .permitAll()
+                    // NOTE
+                    .requestMatchers(GET, "/api/v1/notes")
+                    .authenticated()
+                    .requestMatchers(POST, "/api/v1/notes")
+                    .authenticated()
+                    // AUTH
+                    .requestMatchers(POST, "/api/v1/auth/login")
+                    .permitAll()
+                    .requestMatchers(POST, "/api/v1/auth/register")
+                    .permitAll()
                     .anyRequest()
-                    .permitAll())
+                    .denyAll())
         .build();
   }
 
