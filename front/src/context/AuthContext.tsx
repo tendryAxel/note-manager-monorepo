@@ -75,17 +75,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string) => {
     const request: LoginRequest = { email, password };
     const data: AuthResponse = await AuthenticationService.login({ requestBody: request });
-    
+
     setUser(data.user);
     setStoredAuth(data.user, data.token);
-    
+
     await fetchNotes();
   };
 
   const register = async (name: string, email: string, password: string) => {
     const request: RegisterRequest = { name, email, password };
     const data: AuthResponse = await AuthenticationService.register({ requestBody: request });
-    
+
     setUser(data.user);
     setStoredAuth(data.user, data.token);
     setNotes([]);
