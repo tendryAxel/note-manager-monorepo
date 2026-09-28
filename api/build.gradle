@@ -5,11 +5,9 @@ plugins {
 	id 'org.openapi.generator' version '7.10.0'
 }
 
-def openApiSpec = file("$projectDir/openapi.yml").canonicalFile
-
 openApiGenerate {
 	generatorName = "java"
-	inputSpec = openApiSpec.absolutePath
+	inputSpec = "$projectDir/openapi.yml"
 	outputDir = "$buildDir/generated/openapi"
 
 	modelPackage = "com.note.api.note_manager.rest.model"
