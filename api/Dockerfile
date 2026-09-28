@@ -5,7 +5,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN ./gradlew bootJar --no-daemon
+RUN gradle bootJar --no-daemon
 
 
 # ---------- Runtime stage ----------
