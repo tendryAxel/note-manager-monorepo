@@ -53,14 +53,14 @@ export default function LoginPage() {
       className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4"
     >
       <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent" />
-      
+
       <motion.div
         variants={itemVariants}
         className="max-w-md w-full space-y-8 glass-card rounded-2xl p-8 relative overflow-hidden"
         style={{ boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3)' }}
       >
-        <div className="absolute inset-0 glass-shimmer" />
-        
+        <div className="absolute inset-0 glass-shimmer pointer-events-none" />
+
         <motion.div variants={itemVariants} className="relative z-10">
           <h2 className="text-center text-3xl font-bold text-gray-900 dark:text-white mb-2">Welcome back</h2>
           <p className="text-center text-gray-600 dark:text-gray-400">Sign in to continue to Notes</p>
