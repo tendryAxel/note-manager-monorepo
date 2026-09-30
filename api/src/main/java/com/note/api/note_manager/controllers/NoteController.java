@@ -55,7 +55,7 @@ public class NoteController {
   public Note deleteNote(@PathVariable String id) {
     var principal = getPrincipal();
     if (!noteService.doUserOwnThisNote(principal.getId(), id)) {
-      throw new RuntimeException("User with id %s doesn't own the note with id %s");
+      throw new RuntimeException("User with id %s doesn't own the note with id %s".formatted(principal.getId(), id));
     }
     var deleted = noteService.deleteById(id);
     return new Note()
